@@ -1,17 +1,6 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-
-export type PageElement = 
-  | { type: 'image'; src: string | undefined; alt: string }
-  | { type: 'link'; text: string; href: string | undefined }
-  | { type: 'list'; ordered: boolean; items: string[] }
-  | { type: 'heading'; level: number; text: string }
-  | { type: 'paragraph'; text: string };
-
-export interface ScrapeResult {
-  url: string;
-  structure: PageElement[];
-}
+import { PageElement, ScrapeResult } from '../models/scrape.model';
 
 export class ScrapeService {
   async extractPageStructure(url: string): Promise<ScrapeResult> {

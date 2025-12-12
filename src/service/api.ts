@@ -1,9 +1,10 @@
-import { ScrapeService, ScrapeResult } from './scrape/scrape.service';
+import { ScrapeController } from './controllers/scrape.controller';
+import { ScrapeResult } from './models/scrape.model';
 
-const scrapeService = new ScrapeService();
+const scrapeController = new ScrapeController();
 
 export const api = {
   scrape: {
-    extractPageStructure: (url: string): Promise<ScrapeResult> => scrapeService.extractPageStructure(url),
+    extractPageStructure: (url: string): Promise<ScrapeResult> => scrapeController.extractPageStructure(url),
   },
 };
