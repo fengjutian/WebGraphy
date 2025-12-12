@@ -1,10 +1,20 @@
-import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-@Injectable()
+export type PageElement = 
+  | { type: 'image'; src: string | undefined; alt: string }
+  | { type: 'link'; text: string; href: string | undefined }
+  | { type: 'list'; ordered: boolean; items: string[] }
+  | { type: 'heading'; level: number; text: string }
+  | { type: 'paragraph'; text: string };
+
+export interface ScrapeResult {
+  url: string;
+  structure: PageElement[];
+}
+
 export class ScrapeService {
-  async extractPageStructure(url: string) {
+  async extractPageStructure(url: string): Promise<ScrapeResult> {
     const { data } = await axios.get(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0',
@@ -13,7 +23,7 @@ export class ScrapeService {
 
     const $ = cheerio.load(data);
 
-    const result = [];
+    const result: PageElement[] = [];
 
     $('h1, h2, h3, h4, h5, h6, p, ul, ol, img, a').each((_, el) => {
       const tag = el.tagName.toLowerCase();
@@ -37,7 +47,7 @@ export class ScrapeService {
       }
 
       if (tag === 'ul' || tag === 'ol') {
-        const items = [];
+        const items: string[] = [];
         $(el)
           .find('li')
           .each((_, li) => {
