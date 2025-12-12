@@ -4,8 +4,11 @@ import { PageElement, ScrapeResult } from '../models/scrape.model';
 
 export class ScrapeService {
   async extractPageStructure(url: string): Promise<ScrapeResult> {
-    // 使用代理解决CORS问题
-    const { data } = await axios.get(`/api/scrape/${url}`);
+    // 使用本地代理解决CORS问题
+    const proxyUrl = '/api/scrape';
+    // 从URL中提取路径部分（去掉协议和域名）
+    const urlPath = url.replace(/^https?:\/\/[^\/]+/, '');
+    const { data } = await axios.get(`${proxyUrl}${urlPath}`);
 
     const $ = cheerio.load(data);
 
