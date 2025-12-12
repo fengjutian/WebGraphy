@@ -4,11 +4,8 @@ import { PageElement, ScrapeResult } from '../models/scrape.model';
 
 export class ScrapeService {
   async extractPageStructure(url: string): Promise<ScrapeResult> {
-    const { data } = await axios.get(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0',
-      },
-    });
+    // 使用代理解决CORS问题
+    const { data } = await axios.get(`/api/scrape/${url}`);
 
     const $ = cheerio.load(data);
 
